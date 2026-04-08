@@ -20,7 +20,7 @@ This project demonstrates the design and implementation of a secure 2-tier archi
 
 ## 📊 Architecture Diagram
 
-![Architecture](Two%20tier-architecture.png)
+![Architecture](Two%20tier%20-%20architecture.png)
 
 ---
 
