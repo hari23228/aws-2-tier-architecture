@@ -2,7 +2,7 @@
 
 ## 📌 Overview
 
-This project demonstrates the implementation of a secure 2-tier architecture using AWS services. It includes a web server hosted in a public subnet and a database server hosted in a private subnet within a Virtual Private Cloud (VPC).
+This project demonstrates the design and implementation of a secure 2-tier architecture using AWS services. The architecture is built within a Virtual Private Cloud (VPC), consisting of a public subnet for the web layer and a private subnet for the database layer, ensuring proper network isolation and security.
 
 ---
 
@@ -18,66 +18,84 @@ This project demonstrates the implementation of a secure 2-tier architecture usi
 
 ---
 
-![Architecture](Two tier-architecture.png)
+## 📊 Architecture Diagram
+
+![Architecture](Two%20tier-architecture.png)
 
 ---
 
 ## 🔄 Architecture Flow
 
-1. User accesses the web server via Internet Gateway
-2. Web server processes request
-3. Web server communicates with database using private IP
-4. Database accesses internet via NAT Gateway for updates
+1. User sends request from the internet
+2. Request reaches Internet Gateway (IGW)
+3. IGW routes traffic to Web Server (EC2 in Public Subnet)
+4. Web Server processes request and communicates with Database (Private EC2) using private IP
+5. Database sends outbound traffic via NAT Gateway for updates
+6. Response is sent back to the user through IGW
 
 ---
 
 ## 🔐 Security
 
-* Database is not publicly accessible
-* Security Groups restrict access:
+* Database is not publicly accessible (Private Subnet)
+* Security Groups enforce restricted access:
 
-  * Web EC2: HTTP (80), SSH (22)
-  * DB EC2: PostgreSQL (5432) from Web EC2 only
+  * Web EC2:
+
+    * HTTP (80) → 0.0.0.0/0
+    * SSH (22) → My IP
+  * DB EC2:
+
+    * PostgreSQL (5432) → Web EC2 only
+    * SSH (22) → Web EC2 only
 
 ---
 
 ## 🚀 Implementation Steps
 
-1. Create VPC
+1. Create VPC with CIDR block
 2. Create Public and Private Subnets
-3. Attach Internet Gateway
-4. Configure Route Tables
-5. Create NAT Gateway
-6. Launch EC2 instances
-7. Configure Security Groups
-8. Install Apache and PostgreSQL
+3. Attach Internet Gateway to VPC
+4. Configure Public Route Table (IGW)
+5. Create NAT Gateway in Public Subnet
+6. Configure Private Route Table (NAT Gateway)
+7. Create Security Groups
+8. Launch EC2 instances (Web & Database)
+9. Install Apache (Web Server)
+10. Install PostgreSQL (Database Server)
 
 ---
 
 ## ✅ Testing
 
-* Access web server via browser
-* SSH into Web EC2
-* Connect Web → DB using private IP
-* Verify NAT using `ping google.com`
+* Access web server via browser using public IP
+* SSH into Web EC2 instance
+* Connect to DB EC2 using private IP from Web EC2
+* Verify internet access from private EC2 using:
 
----
-
-## 📊 Architecture Diagram
-
-(Add your diagram image here)
+  ```bash
+  ping google.com
+  ```
 
 ---
 
 ## 🎯 Key Learnings
 
-* VPC networking and subnet isolation
-* Route tables and internet routing
-* NAT Gateway usage
-* Secure communication between tiers
+* VPC design and subnet isolation
+* Route tables and traffic flow
+* Internet Gateway vs NAT Gateway
+* Secure communication using Security Groups
+* Public vs Private subnet behavior
 
 ---
 
 ## 📌 Conclusion
 
-This project demonstrates a secure and scalable 2-tier architecture in AWS, following best practices for network isolation and controlled access.
+This project demonstrates a secure and scalable 2-tier AWS architecture by separating web and database layers into different subnets. It follows best practices for network security, controlled access, and efficient resource communication within a cloud environment.
+
+
+## 📄 Documentation
+
+For a detailed explanation of the architecture, implementation steps, please refer to the attached document:
+
+[Two Tier Application using Private Network](./Two%20tier%20Application%20using%20private%20network.docx)
