@@ -18,6 +18,10 @@ This project demonstrates the implementation of a secure 2-tier architecture usi
 
 ---
 
+![Architecture](Two tier-architecture.png)
+
+---
+
 ## 🔄 Architecture Flow
 
 1. User accesses the web server via Internet Gateway
